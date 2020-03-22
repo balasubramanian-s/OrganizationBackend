@@ -18,45 +18,45 @@ import com.revature.organization.model.student;
 import com.revature.organization.service.studentservice;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/core")
 @CrossOrigin(origins = "*")
 public class StudentController {
 	@Autowired
 	private studentservice studservice;
 
-	@GetMapping("/getall")
+	@GetMapping("/students")
 	public List<student> get() throws ServiceException {
 		return studservice.get();
 	}
 
-	@GetMapping("/get/{id}")
+	@GetMapping("/students/{id}")
 	public student get(@PathVariable Long id) throws ServiceException {
 		return studservice.get(id);
 	}
 
-	@GetMapping("/institution/{inst_id}")
+	@GetMapping("/students/institutions/{inst_id}")
 	public List<student> getstudbyInst(@PathVariable Long inst_id) throws ServiceException {
 
 		return studservice.getstudbyInst(inst_id);
 	}
 
-	@GetMapping("/year/{institutionid}/{year}")
+	@GetMapping("/students/institutions/year/{institutionid}/{year}")
 	public List<student> getstudbyInstYear(@PathVariable Long institutionid, @PathVariable int year)
 			throws ServiceException {
 		return studservice.getstudbyInstYear(institutionid, year);
 	}
 
-	@GetMapping("/year/{year}")
+	@GetMapping("/students/year/{year}")
 	public List<student> getstudbyYear(@PathVariable int year) throws ServiceException {
 		return studservice.getstudbyYear(year);
 	}
 
-	@PostMapping("/addStudent")
+	@PostMapping("/students")
 	public void save(@RequestBody InsertStudentDto idto) throws DBException {
 		studservice.save(idto);
 	}
 
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/students/{id}")
 	public String delete(@PathVariable Long id) throws ServiceException {
 		studservice.delete(id);
 		return "Student of "+id+" deleted";

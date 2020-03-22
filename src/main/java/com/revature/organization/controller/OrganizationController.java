@@ -21,7 +21,7 @@ import com.revature.organization.model.Organization;
 import com.revature.organization.service.OrganizationService;
 
 @RestController
-@RequestMapping("/organization")
+@RequestMapping("/core")
 @CrossOrigin(origins = "*")
 
 public class OrganizationController {
@@ -29,7 +29,7 @@ public class OrganizationController {
 	@Autowired
 	private OrganizationService organizationService;
 	
-	@GetMapping("/organization")
+	@GetMapping("/organizations")
 	public List<Organization> get() throws ServiceException {
 
 		return organizationService.get();
@@ -37,32 +37,32 @@ public class OrganizationController {
 	}
 	
 
-	@PostMapping("/organization")
+	@PostMapping("/organizations")
 	public Organization save(@RequestBody Organization organizationObj) throws DBException {
 		organizationService.save(organizationObj);
 		return organizationObj;
 
 	}
 
-	@GetMapping("/organization/{id}")
+	@GetMapping("/organizations/{id}")
 	public Organization get(@PathVariable Long id) throws ServiceException {
 		Organization organizationObj= organizationService.get(id);
 		
 		return organizationObj;
 	}
 	
-	@DeleteMapping("/organization/{id}")
+	@DeleteMapping("/organizations/{id}")
 	public String delete(@PathVariable Long id) throws ServiceException {
 		organizationService.delete(id);
 		return "Employee Deleted with id:"+id;
 	}
 
-	@PutMapping("/organization")
+	@PutMapping("/organizations")
 	public Organization update(@RequestBody Organization organizationObj) throws DBException {
 		organizationService.save(organizationObj);
 		return organizationObj;
 	}
-	@PutMapping("/organization/status/{id}")
+	@PutMapping("/organizations/status/{id}")
 	public  void changeStatus(@PathVariable Long id) throws DBException {
 		organizationService.changeStatus(id);
 		
