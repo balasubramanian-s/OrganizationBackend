@@ -18,7 +18,7 @@ import com.revature.organization.model.student;
 import com.revature.organization.service.studentservice;
 
 @RestController
-@RequestMapping("/core")
+@RequestMapping("/user")
 @CrossOrigin(origins = "*")
 public class StudentController {
 	@Autowired

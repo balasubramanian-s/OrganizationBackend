@@ -19,7 +19,7 @@ import com.revature.organization.model.Roles;
 import com.revature.organization.service.RolesService;
 
 @RestController
-@RequestMapping("/core")
+@RequestMapping("/role")
 @CrossOrigin(origins = "*")
 public class RolesController {
 	@Autowired

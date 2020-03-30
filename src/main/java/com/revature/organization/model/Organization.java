@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "institution")
@@ -20,11 +21,15 @@ public class Organization {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
+	
 	@Column(name="`name`")
+	@NotEmpty(message="Name Cannot be Empty")
 	private String name;
 	@Column(name="`alias_name`")
+	@NotEmpty(message="Alias Cannot be Empty")
 	private String alias;
 	@Column(name="`university`")
+	@NotEmpty(message="University Cannot be Empty")
 	private String university;
 	@Column(name="`created_on`")
 	 private LocalDateTime createdon;

@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.revature.organization.dao.OrganizationDAO;
+import com.revature.organization.exception.BadResponse;
 import com.revature.organization.exception.DBException;
 import com.revature.organization.exception.ServiceException;
 import com.revature.organization.model.Organization;
@@ -56,7 +59,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 	@Transactional
 	@Override
-	public void save(Organization org) throws DBException{
+	public void save(Organization org) throws DBException,MethodArgumentNotValidException{
 		try {
 			LocalDateTime ts = LocalDateTime.now();	
 			if(org.getId()==null) {		
@@ -70,7 +73,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 			String Aname = org.getAlias();
 			String University = org.getUniversity();
 			if(name == null || Aname == null || University == null) {
-				throw new DBException(OrganizationMessage.UNABLE_TO_INSERT);
+				throw new MethodArgumentNotValidException(null, null);
 			}
 			organizationDAO.save(org);
 		}catch(DBException e) {

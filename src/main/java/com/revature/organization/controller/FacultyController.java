@@ -20,7 +20,7 @@ import com.revature.organization.service.FacultyService;
 
 
 @RestController
-@RequestMapping("/core")
+@RequestMapping("/faculty")
 @CrossOrigin(origins = "*")
 public class FacultyController {
 	@Autowired
