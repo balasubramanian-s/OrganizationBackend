@@ -2,6 +2,9 @@ package com.revature.organization.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.organization.exception.BadResponse;
 import com.revature.organization.exception.DBException;
+import com.revature.organization.exception.NotFound;
 import com.revature.organization.exception.ServiceException;
 import com.revature.organization.model.Roles;
 import com.revature.organization.service.RolesService;
@@ -26,32 +31,34 @@ public class RolesController {
 	private RolesService rolesService;
 
 	// CONTROLLER FOR ROLES
-		@GetMapping("/roles")
-		public List<Roles> getRoles() throws ServiceException {
+		@GetMapping("/")
+		public List<Roles> getRoles() throws ServiceException, NotFound {
 			return rolesService.get();
 		}
 
-		@GetMapping("/roles/{id}")
-		public Roles getRolesById(@PathVariable Long id) throws ServiceException {
-			return rolesService.get(id);
+		@GetMapping("/{id}")
+		public Roles getRolesById(@NotNull @PathVariable Long id) throws  NotFound {
+			
+				return rolesService.get(id);
+			
 
 		}
 
-		@PostMapping("/roles")
-		public Roles save(@RequestBody Roles role) throws DBException {
+		@PostMapping("/")
+		public Roles save(@Valid @RequestBody Roles role) throws DBException, BadResponse {
 			rolesService.save(role);
 			return role;
 		}
 
-		@PutMapping("/roles")
-		public Roles update(@RequestBody Roles role) throws DBException {
+		@PutMapping("/")
+		public Roles update(@Valid @RequestBody Roles role) throws DBException, BadResponse {
 			rolesService.save(role);
 			return role;
 
 		}
 
-		@DeleteMapping("/roles/{id}")
-		public String deleteRole(@PathVariable Long id) throws ServiceException {
+		@DeleteMapping("/{id}")
+		public String deleteRole(@NotNull @PathVariable Long id) throws  NotFound {
 			rolesService.delete(id);
 			return "Role Deleted with id:" + id;
 		}

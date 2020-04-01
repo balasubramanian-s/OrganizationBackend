@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.revature.organization.exception.BadResponse;
 import com.revature.organization.exception.DBException;
+import com.revature.organization.exception.NotFound;
 import com.revature.organization.exception.ServiceException;
 import com.revature.organization.dao.RolesDao;
 import com.revature.organization.model.Roles;
@@ -22,12 +25,12 @@ public class RolesServiceImpl implements RolesService {
 	
 	@Transactional
 	@Override
-	public List<Roles> get() throws ServiceException {
+	public List<Roles> get() throws NotFound {
 		List<Roles> list=new ArrayList<Roles>();
 		try {
 			list=rolesDao.get();
 			if(list.isEmpty()) {
-				throw new ServiceException(RolesMessage.NO_RECORD);
+				throw new NotFound(HttpStatus.NOT_FOUND.value(),RolesMessage.NO_RECORD);
 			}
 		}catch(DBException e) {
 			System.out.println(e.getMessage());
@@ -37,12 +40,12 @@ public class RolesServiceImpl implements RolesService {
 	}
 	@Transactional
 	@Override
-	public Roles get(Long id) throws ServiceException {
+	public Roles get(Long id) throws NotFound {
 		Roles role = new Roles();
 		try {
 			role = rolesDao.get(id);
 			if(role == null) {
-				throw new ServiceException(RolesMessage.UNABLE_TO_FIND_ROLE);
+				throw new NotFound(HttpStatus.NOT_FOUND.value(),RolesMessage.UNABLE_TO_FIND_ROLE);
 			}
 		}catch( DBException e) {
 			System.out.println(e.getMessage());
@@ -52,11 +55,11 @@ public class RolesServiceImpl implements RolesService {
 	}
 	@Transactional
 	@Override
-	public void save(Roles role) throws DBException {
+	public void save(Roles role) throws DBException,BadResponse {
 		try {
 			String name = role.getName();
 			if(name == null) {
-				throw new DBException(RolesMessage.UNABLE_TO_INSERT);
+				throw new BadResponse(HttpStatus.BAD_REQUEST.value(),RolesMessage.UNABLE_TO_INSERT);
 			}
 			rolesDao.save(role);
 			}catch (DBException e) {
@@ -67,16 +70,16 @@ public class RolesServiceImpl implements RolesService {
 	}
 	@Transactional
 	@Override
-	public void delete(Long id) throws ServiceException {
+	public void delete(Long id) throws NotFound {
 		Roles role = new Roles();
 		try {
 			role=rolesDao.get(id);
-			if(role != null) {
-				rolesDao.delete(id);
+			if(role == null) {
+				throw new NotFound(HttpStatus.NOT_FOUND.value(),RolesMessage.UNABLE_TO_DELETE_ROLE);
+				
 			}
-			else {
-				throw new ServiceException(RolesMessage.UNABLE_TO_DELETE_ROLE);
-			}
+			rolesDao.delete(id);
+			
 		}catch( DBException e) {
 			System.out.println(e.getMessage());
 		}

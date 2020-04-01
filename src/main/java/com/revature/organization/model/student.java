@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "`Student`")
@@ -18,33 +20,34 @@ public class student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+	@NotNull(message="Register number cannot be Empty")
 	@Column(name = "`register_number`")
 	private Long redgno;
+	@NotNull(message="Organization cannot be Empty")
 	@ManyToOne
 	@JoinColumn(name = "`institution_id`")
 	private Organization org;
 	
 	
-	
+	@NotEmpty(message="Firstname Cannnot be Empty")
 	@Column(name = "`first_name`")
 	private String fname;
-	
+	@NotEmpty(message="Lastname Cannnot be Empty")
 	@Column(name = "`last_name`")
 	private String lname;
-	
+	@NotNull(message="DateofBirth cannot be Empty")
 	@Column(name = "`dob`")
 	private Date dob;
-	
+	@NotNull(message="Year cannot be Empty")
 	@Column(name = "`year`")
 	private Integer year;
-	
+	@NotNull(message="Mobile Number cannot be Empty")
 	@Column(name = "`mobile_number`")
 	private Long mobileno;
-	
+	@NotEmpty(message="Email Cannnot be Empty")
 	@Column(name = "`email`")
 	private String email;
-	
+	@NotNull(message="CreatedOn cannot be Empty")
 	@Column(name = "`created_on`")
 	private LocalDateTime createdon;
 	
