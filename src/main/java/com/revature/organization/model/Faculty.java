@@ -1,6 +1,5 @@
 package com.revature.organization.model;
 
-
 import java.sql.Date;
 
 import java.time.LocalDateTime;
@@ -13,30 +12,40 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.revature.organization.model.Roles;
+
 @Entity
 @Table(name = "`faculty`")
 public class Faculty {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotNull(message = "Employee Id Cannot be Empty")
 	@Column(name = "`employee_id`")
 	private int employee_id;
-	
+	@NotNull(message = "Organization Cannot be Empty")
 	@ManyToOne
 	@JoinColumn(name = "`institution_id`")
-	private  Organization org;
+	private Organization org;
+	@NotEmpty(message = "FirstName Cannot be Empty")
 	@Column(name = "`first_name`")
 	private String first_name;
+	@NotEmpty(message = "lastName Cannot be Empty")
 	@Column(name = "`last_name`")
 	private String last_name;
+	@NotNull(message = "Date of Birth Cannot be empty")
 	@Column(name = "`dob`")
 	private Date dob;
+	@NotEmpty(message = "Email cannot be Empty")
 	@Column(name = "`email_id`")
 	private String email;
+	@NotNull(message = "Mobile number cannot be empty")
 	@Column(name = "`mobile_number`")
 	private Long mobile_no;
-	
+	@NotNull(message = "Role Cannot be Empty")
 	@ManyToOne(targetEntity = Roles.class)
 	@JoinColumn(name = "`role_id`")
 	private Roles roles;
@@ -48,8 +57,6 @@ public class Faculty {
 	private String createdby;
 	@Column(name = "`modified_by`")
 	private String modifiedby;
-
-	
 
 	public Long getId() {
 		return id;
@@ -66,8 +73,6 @@ public class Faculty {
 	public void setEmployee_id(int employee_id) {
 		this.employee_id = employee_id;
 	}
-
-	
 
 	public Organization getOrg() {
 		return org;
@@ -117,9 +122,6 @@ public class Faculty {
 		this.mobile_no = mobile_no;
 	}
 
-
-	
-
 	public Roles getRoles() {
 		return roles;
 	}
@@ -167,12 +169,5 @@ public class Faculty {
 				+ ", roles=" + roles + ", createdon=" + createdon + ", modifiedon=" + modifiedon + ", createdby="
 				+ createdby + ", modifiedby=" + modifiedby + "]";
 	}
-
-
-	
-	
-
-
-	
 
 }

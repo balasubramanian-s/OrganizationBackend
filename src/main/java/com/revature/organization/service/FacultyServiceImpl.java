@@ -5,136 +5,161 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.revature.organization.exception.BadResponse;
 import com.revature.organization.exception.DBException;
-import com.revature.organization.exception.ServiceException;
+import com.revature.organization.exception.NotFound;
+
 import com.revature.organization.dao.FacultyDao;
 import com.revature.organization.dto.InsertFacultyDto;
 import com.revature.organization.model.Faculty;
 import com.revature.organization.model.Organization;
 import com.revature.organization.model.Roles;
 import com.revature.organization.util.FacultyMessage;
+import com.revature.organization.util.OrganizationMessage;
+
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
-	
-	
 
 	@Autowired
 	private FacultyDao facultyDao;
+
 	
-	@Transactional
 	@Override
-	public List<Faculty> get() throws ServiceException{	
-		List<Faculty> list=new ArrayList<Faculty>();
+	public List<Faculty> getAllFaculty() throws NotFound {
+		List<Faculty> list = new ArrayList<Faculty>();
 		try {
-			list=facultyDao.get();
-			if(list.isEmpty()) {
-				throw new ServiceException(FacultyMessage.NO_RECORD);
+			list = facultyDao.get();
+			if (list.isEmpty()) {
+				throw new NotFound(HttpStatus.NOT_FOUND.value(), FacultyMessage.NO_RECORD);
 			}
-		}catch(DBException e) {
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		}
 		return list;
 	}
+
 	
-	@Transactional
 	@Override
-	public Faculty get(Long id) throws ServiceException {
+	public Faculty getFaculty(Long id) throws NotFound {
 		Faculty fac = new Faculty();
 		try {
-			fac=facultyDao.get(id);
-			if(fac == null) {
-				throw new ServiceException(FacultyMessage.UNABLE_TO_FIND);
+			fac = facultyDao.get(id);
+			if (fac == null) {
+				throw new NotFound(HttpStatus.NOT_FOUND.value(), FacultyMessage.UNABLE_TO_FIND);
 			}
-		}catch( DBException e) {
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
-			
+
 		}
 		return fac;
 	}
-	
+
 	@Transactional
 	@Override
-	public void save(InsertFacultyDto dto) throws DBException {
+	public void saveFaculty(InsertFacultyDto dto) throws BadResponse, DBException {
 		Faculty fac = new Faculty();
 		Organization org = new Organization();
 		Roles role = new Roles();
 		try {
-		if(dto.getId() == null) {
-			fac.setCreatedon(dto.getCreatedon());
-			System.out.println("Object Does Not Exists");
-		}
-		else {
-			fac = facultyDao.get(dto.getId());
-			fac.setModifiedon(dto.getModifiedon());
-			System.out.println("Object Exists");
-			fac.setId(dto.getId());
-		}
-		
-		fac.setEmployee_id(dto.getEmployee_id());
-		org.setId(dto.getInstitution_id());
-		fac.setOrg(org);
-		fac.setFirst_name(dto.getFirst_name());
-		fac.setLast_name(dto.getLast_name());
-		fac.setDob(dto.getDob());
-		fac.setEmail(dto.getEmail());
-		fac.setMobile_no(dto.getMobile_no());
-		role.setId(dto.getRole_id());
-		fac.setRoles(role);
-		Integer id=dto.getEmployee_id();
-		String fname=dto.getFirst_name();
-		String lname=dto.getLast_name();
-		Date dob=dto.getDob();
-		String email=dto.getEmail();
-		Long mobilenumber=dto.getMobile_no();
-		
-		if(id==0 || fname==null || lname==null || dob==null || email==null || mobilenumber==null) {
 			
-			 throw new DBException(FacultyMessage.UNABLE_TO_INSERT);
-		 }
-		 facultyDao.save(fac);
-		 
-		}catch (DBException e) {
+			if (StringUtils.isBlank(dto.getFirst_name()) || StringUtils.isBlank(dto.getLast_name())
+					|| StringUtils.isBlank(dto.getEmail()) || dto.getEmployee_id() == 0
+					|| dto.getInstitution_id() == null || dto.getDob() == null || dto.getMobile_no() == null
+					|| dto.getRole_id() == null) {
+				throw new BadResponse(HttpStatus.NOT_ACCEPTABLE.value(), FacultyMessage.UNABLE_TO_INSERT);
+			}
+		
+			fac.setCreatedon(dto.getCreatedon());
+			fac.setEmployee_id(dto.getEmployee_id());
+			org.setId(dto.getInstitution_id());
+			fac.setOrg(org);
+			fac.setFirst_name(dto.getFirst_name());
+			fac.setLast_name(dto.getLast_name());
+			fac.setDob(dto.getDob());
+			fac.setEmail(dto.getEmail());
+			fac.setMobile_no(dto.getMobile_no());
+			role.setId(dto.getRole_id());
+			fac.setRoles(role);
+
+			facultyDao.save(fac);
+
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		}
 	}
-	
-	
-	
+
 	@Transactional
 	@Override
-	public void delete(Long id) throws ServiceException{
+	public void deleteFaculty(Long id) throws NotFound {
 		Faculty fac = new Faculty();
 		try {
-			fac =facultyDao.get(id);
-			if(fac != null) {
+			fac = facultyDao.get(id);
+			if (fac != null) {
 				facultyDao.delete(id);
+			} else {
+				throw new NotFound(HttpStatus.NOT_FOUND.value(), FacultyMessage.UNABLE_TO_DELETE);
 			}
-			else {
-				throw new ServiceException(FacultyMessage.UNABLE_TO_DELETE);
-			}
-		}catch (DBException e) {
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		}
-		 
-		
+
 	}
+
 	@Override
-	public List<Faculty> getByInstitution(Long id) throws ServiceException {
+	public List<Faculty> getByFacultyInstitution(Long id) throws NotFound {
 		List<Faculty> list = new ArrayList<Faculty>();
 		try {
-			list=facultyDao.getByInstitution(id);
-			if(list.isEmpty()) {
-				throw new ServiceException(FacultyMessage.NO_FAULTY_AVAILABLE);
+			list = facultyDao.getByInstitution(id);
+			if (list.isEmpty()) {
+				throw new NotFound(HttpStatus.NOT_FOUND.value(), FacultyMessage.NO_FAULTY_AVAILABLE);
 			}
-		}catch(DBException e) {
+		} catch (DBException e) {
 			System.out.println(e.getMessage());
 		}
 		return list;
-	
+
+	}
+	@Transactional
+	@Override
+	public void updateFaculty(InsertFacultyDto dto) throws BadResponse, DBException, NotFound {
+		Faculty fac = new Faculty();
+		Organization org = new Organization();
+		Roles role = new Roles();
+		try {
+			fac = facultyDao.get(dto.getId());
+			if (fac == null) {
+				throw new NotFound(HttpStatus.NOT_FOUND.value(), FacultyMessage.UNABLE_TO_FIND);
+			}
+
+			if (StringUtils.isBlank(dto.getFirst_name()) || StringUtils.isBlank(dto.getLast_name())
+					|| StringUtils.isBlank(dto.getEmail()) || dto.getEmployee_id() == 0
+					|| dto.getInstitution_id() == null || dto.getDob() == null || dto.getMobile_no() == null
+					|| dto.getRole_id() == null) {
+				throw new BadResponse(HttpStatus.NOT_ACCEPTABLE.value(), FacultyMessage.UNABLE_TO_INSERT);
+			}
+			fac.setEmployee_id(dto.getEmployee_id());
+			org.setId(dto.getInstitution_id());
+			fac.setOrg(org);
+			fac.setFirst_name(dto.getFirst_name());
+			fac.setLast_name(dto.getLast_name());
+			fac.setDob(dto.getDob());
+			fac.setEmail(dto.getEmail());
+			fac.setMobile_no(dto.getMobile_no());
+			fac.setModifiedon(dto.getModifiedon());
+			role.setId(dto.getRole_id());
+			fac.setRoles(role);
+			facultyDao.save(fac);
+
+		} catch (DBException e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 }

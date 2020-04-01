@@ -3,27 +3,30 @@ package com.revature.organization.dto;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class InsertFacultyDto {
 
 	
 	private Long id;
-	
+	@NotNull(message="Employee Id  cannot be Empty")
 	private int employee_id;
-
+	@NotNull(message="Institution cannot be Empty")
 	private Long institution_id;
-
+	@NotEmpty(message="FirstName Cannot be Empty")
 	private String first_name;
-
+	@NotEmpty(message="lastName Cannot be Empty")
 	private String last_name;
-
+	@NotNull(message="Date of Birth Cannot be empty")
 	private Date dob;
-
+	@NotEmpty(message="Email cannot be Empty")
 	private String email;
-
+	@NotNull(message="Mobile number cannot be empty")
 	private Long mobile_no;
-
+	@NotNull(message="Role Cannot be Empty")
 	private Long role_id;
 	@JsonIgnore
 	private LocalDateTime createdon=LocalDateTime.now();
