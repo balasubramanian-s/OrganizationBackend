@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "institution")
-public class Organization {
+public class Organization  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -137,6 +137,10 @@ public class Organization {
 			return false;
 		return true;
 	}
+
+	
+
+	
 	
 	
 

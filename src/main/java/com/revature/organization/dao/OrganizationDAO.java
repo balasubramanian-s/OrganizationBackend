@@ -7,11 +7,13 @@ import com.revature.organization.model.Organization;
 
 public interface OrganizationDAO {
 	
-	List<Organization> get() throws DBException;
+	public List<Organization> get() throws DBException;
 	
 
 	
-	Organization get(Long id)throws DBException;
+public	Organization get(Long id)throws DBException;
+	
+public 	 List<Organization> getActiveOrganization() throws DBException ;
 	
 	void save(Organization org)throws DBException;
 	

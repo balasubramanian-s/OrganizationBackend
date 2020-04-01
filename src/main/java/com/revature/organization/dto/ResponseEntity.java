@@ -1,15 +1,14 @@
 package com.revature.organization.dto;
 
-import java.util.List;
 
-import org.springframework.http.HttpStatus;
 
 public class ResponseEntity {
 	private int statusCode;
 	private String description;
 	private Object data;
-	private List<String> errors;
-	
+
+	private String error;
+	//private HttpStatus status;
 	
 	public ResponseEntity(int statusCode, String description, Object data) {
 	
@@ -17,11 +16,19 @@ public class ResponseEntity {
 		this.description = description;
 		this.data = data;
 	}
-	public ResponseEntity(int status,List<String> errors) {
+	
+	public ResponseEntity(int status,String error) {
 		this.statusCode=status;
-		this.errors=errors;
+		this.error=error;
+	}
+	public ResponseEntity(int status,String description,String error) {
+		this.statusCode=status;
+		this.description = description;
+		this.error=error;
 	}
 
+
+	
 
 	public int getStatusCode() {
 		return statusCode;
@@ -51,11 +58,14 @@ public class ResponseEntity {
 	public void setData(Object data) {
 		this.data = data;
 	}
-	public List<String> getErrors() {
-		return errors;
+	
+
+	public String getError() {
+		return error;
 	}
-	public void setErrors(List<String> errors) {
-		this.errors = errors;
+
+	public void setError(String error) {
+		this.error = error;
 	}
 
 

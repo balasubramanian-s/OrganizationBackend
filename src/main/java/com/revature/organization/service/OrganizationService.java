@@ -1,24 +1,24 @@
 package com.revature.organization.service;
 
 import java.util.List;
-
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import com.revature.organization.exception.ServiceException;
 import com.revature.organization.exception.BadResponse;
 import com.revature.organization.exception.DBException;
+import com.revature.organization.exception.NotFound;
 import com.revature.organization.model.Organization;
 
 public interface OrganizationService {
 
 	
-	List<Organization> get() throws ServiceException;
+	public List<Organization> get() throws NotFound;
 
-	Organization get(Long id)throws ServiceException;
+	public Organization get(Long id)throws NotFound;
 	
-	void save(Organization org)throws DBException,MethodArgumentNotValidException;
+	public List<Organization> getActiveOrganization() throws NotFound ;
 	
-	void delete(Long id)throws ServiceException;
+	void save(Organization dto)throws BadResponse,DBException;
+	void update(Organization dto)throws BadResponse,DBException,NotFound;
 	
-	void changeStatus(Long id)throws DBException;
+	void delete(Long id)throws NotFound;
+	
+	void changeStatus(Long id)throws DBException,NotFound;
 }

@@ -32,6 +32,14 @@ public class OrganizationDAOImpl implements OrganizationDAO {
 		Organization organizationObject = curentSession.get(Organization.class, id);
 		return organizationObject;
 	}
+	@Override
+	public List<Organization> getActiveOrganization() throws DBException {
+		Session curentSession = entityManager.unwrap(Session.class);
+		Query<Organization> query = curentSession.createQuery("from Organization where isactive = '1'",
+				Organization.class);
+		List<Organization> list = query.getResultList();
+		return list;
+	}
 
 	@Override
 	public void save(Organization org) throws DBException{
