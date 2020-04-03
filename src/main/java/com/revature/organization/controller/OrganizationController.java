@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.revature.organization.dto.ResponseEntity;
@@ -40,9 +42,10 @@ public class OrganizationController {
 	
 	
 	
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/organization")
-	public ResponseEntity get() throws ServiceException, NotFound {
+	@ResponseBody
+	public ResponseEntity getAllOrganization() throws ServiceException, NotFound {
 		try {
 			List<Organization> list=organizationService.get();
 			
@@ -125,7 +128,7 @@ public class OrganizationController {
 	}
 	
 	@PutMapping("/organization/status/{id}")
-	public ResponseEntity changeStatus(@PathVariable Long id) throws DBException,NotFound {
+	public ResponseEntity changeStatus(@PathVariable Long id ,@RequestBody Integer id1) throws DBException,NotFound {
 		try {
 			organizationService.changeStatus(id);
 			return new ResponseEntity(HttpStatus.OK.value(), "Status Changed",id);

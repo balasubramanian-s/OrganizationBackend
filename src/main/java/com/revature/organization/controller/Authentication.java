@@ -41,8 +41,8 @@ public class Authentication {
 		throw new Exception("Incorrect Username and Password", e);		}
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
-		final String jwt = jwtUtil.generateToken(userDetails);
-
+		 String jwt = jwtUtil.generateToken(userDetails);
+			
 		return ResponseEntity.ok(new AuthenticationResponse(jwt));
 	}
 

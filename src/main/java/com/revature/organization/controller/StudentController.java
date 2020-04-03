@@ -29,7 +29,7 @@ import com.revature.organization.util.StudentMessage;
 
 @RestController
 @RequestMapping("/student")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class StudentController {
 	@Autowired
 	private studentservice studservice;
@@ -107,7 +107,7 @@ public class StudentController {
 		}
 
 	}
-
+	
 	@PutMapping("/")
 	public ResponseEntity updateStudent(@Valid @RequestBody InsertStudentDto dto)
 			throws DBException, BadResponse, NotFound {
