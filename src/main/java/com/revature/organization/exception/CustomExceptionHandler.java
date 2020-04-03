@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -119,7 +120,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		ResponseError responseError = new ResponseError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
 		return new ResponseEntity<Object>(responseError, new HttpHeaders(), responseError.getStatus());
 	}
-
+	
+	@ExceptionHandler({AccessDeniedException.class})
+	public ResponseEntity<Object> handleAccesDenied(AccessDeniedException ex, WebRequest request){
+		ResponseError responserError=new ResponseError(HttpStatus.UNAUTHORIZED,"Access Denied");
+		return buildResponseEntity(responserError);
+	}
+	
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
 		ResponseError responseError = new ResponseError(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went Wrong");

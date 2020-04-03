@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ import com.revature.organization.service.FacultyService;
 import com.revature.organization.util.FacultyMessage;
 import com.revature.organization.util.OrganizationMessage;
 
-import javassist.NotFoundException;
+
 
 
 @RestController
@@ -36,7 +37,7 @@ import javassist.NotFoundException;
 public class FacultyController {
 	@Autowired
 	private FacultyService facultyService;
-	
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/")
 	public ResponseEntity getAllFaculty() throws ServiceException {
 		try {
@@ -47,7 +48,7 @@ public class FacultyController {
 		}
 
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/institution/{inst_id}")
 	public ResponseEntity getbyInst(@PathVariable Long inst_id) throws ServiceException {
 
@@ -58,7 +59,7 @@ public class FacultyController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(),OrganizationMessage.NO_RECORDS);
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/{id}")
 	public ResponseEntity get(@PathVariable Long id) throws ServiceException {
 
@@ -69,7 +70,7 @@ public class FacultyController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(),OrganizationMessage.NO_RECORDS);
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 	@PostMapping("/")
 	public ResponseEntity save(@Valid @RequestBody InsertFacultyDto dto) throws DBException {
 		try {
@@ -81,7 +82,7 @@ public class FacultyController {
 			
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 	@PutMapping("/")
 	public ResponseEntity update(@Valid @RequestBody InsertFacultyDto dto) throws DBException, NotFound {
 		try {
@@ -95,7 +96,7 @@ public class FacultyController {
 		
 		
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable Long id) throws NotFound {
 		try {

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.revature.organization.dto.ResponseEntity;
 import com.revature.organization.exception.BadResponse;
@@ -42,7 +41,7 @@ public class OrganizationController {
 	
 	
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/organization")
 	@ResponseBody
 	public ResponseEntity getAllOrganization() throws ServiceException, NotFound {
@@ -55,6 +54,7 @@ public class OrganizationController {
 		}		
 
 	}
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/organization/active")
 	public ResponseEntity getActiveOrganization() throws ServiceException, NotFound {
 		try {
@@ -67,7 +67,7 @@ public class OrganizationController {
 
 	}
 	
-	
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/organization/{id}")
 	public ResponseEntity get(@PathVariable Long id) throws ServiceException, NotFound {
 		
@@ -81,7 +81,7 @@ public class OrganizationController {
 		}
 		
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/organization")
 	public ResponseEntity save(@Valid @RequestBody Organization Obj) throws MethodArgumentNotValidException, BadResponse, DBException {
 		try {
@@ -97,7 +97,7 @@ public class OrganizationController {
 	}
 	
 
-	
+	@PreAuthorize("hasRole('ADMIN')")
 
 	@PutMapping("/organization")
 	public ResponseEntity update(@Valid @RequestBody Organization organizationObj) throws DBException,BadResponse,NotFound{
@@ -113,7 +113,7 @@ public class OrganizationController {
 			
 		}
 	}
-	
+	@PreAuthorize("hasRole('ADMIN')")	
 	@DeleteMapping("/organization/{id}")
 	public ResponseEntity delete(@PathVariable Long id) throws ServiceException, NotFound {
 		
@@ -126,9 +126,9 @@ public class OrganizationController {
 		
 		
 	}
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/organization/status/{id}")
-	public ResponseEntity changeStatus(@PathVariable Long id ,@RequestBody Integer id1) throws DBException,NotFound {
+	public ResponseEntity changeStatus(@PathVariable Long id ) throws DBException,NotFound {
 		try {
 			organizationService.changeStatus(id);
 			return new ResponseEntity(HttpStatus.OK.value(), "Status Changed",id);

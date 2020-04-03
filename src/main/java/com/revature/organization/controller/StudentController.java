@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ import com.revature.organization.util.StudentMessage;
 public class StudentController {
 	@Autowired
 	private studentservice studservice;
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/")
 	public ResponseEntity getAllStudent() throws NotFound {
 
@@ -45,7 +46,7 @@ public class StudentController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(), StudentMessage.UNABLE_TO_FIND);
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/{id}")
 	public ResponseEntity getStudentById(@NotNull @PathVariable Long id) throws NotFound {
 
@@ -58,7 +59,7 @@ public class StudentController {
 		}
 
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/institution/{inst_id}")
 	public ResponseEntity getStudentByInst(@NotNull @PathVariable Long inst_id) throws NotFound {
 
@@ -70,7 +71,7 @@ public class StudentController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(), StudentMessage.UNABLE_TO_FIND);
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/institution/year/{institutionid}/{year}")
 	public ResponseEntity getStudentByInstYear(@NotNull @PathVariable Long institutionid, @PathVariable int year)
 			throws NotFound {
@@ -83,7 +84,7 @@ public class StudentController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(), StudentMessage.UNABLE_TO_FIND);
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/year/{year}")
 	public ResponseEntity getStudentByYear(@NotNull @PathVariable int year) throws NotFound, DBException {
 		try {
@@ -94,7 +95,7 @@ public class StudentController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(), StudentMessage.UNABLE_TO_FIND);
 		}
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@PostMapping("/")
 	public ResponseEntity saveStudent(@Valid @RequestBody InsertStudentDto dto) throws DBException, BadResponse {
 		try {
@@ -107,7 +108,7 @@ public class StudentController {
 		}
 
 	}
-	
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@PutMapping("/")
 	public ResponseEntity updateStudent(@Valid @RequestBody InsertStudentDto dto)
 			throws DBException, BadResponse, NotFound {
@@ -123,7 +124,7 @@ public class StudentController {
 		}
 
 	}
-
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity deleteStudent(@Valid @PathVariable Long id) throws NotFound {
 		try {

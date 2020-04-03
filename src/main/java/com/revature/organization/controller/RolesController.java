@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +32,12 @@ public class RolesController {
 	private RolesService rolesService;
 
 	// CONTROLLER FOR ROLES
+		@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 		@GetMapping("/")
 		public List<Roles> getRoles() throws ServiceException, NotFound {
 			return rolesService.get();
 		}
-
+		@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 		@GetMapping("/{id}")
 		public Roles getRolesById(@NotNull @PathVariable Long id) throws  NotFound {
 			
@@ -43,20 +45,20 @@ public class RolesController {
 			
 
 		}
-
+		@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 		@PostMapping("/")
 		public Roles save(@Valid @RequestBody Roles role) throws DBException, BadResponse {
 			rolesService.save(role);
 			return role;
 		}
-
+		@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 		@PutMapping("/")
 		public Roles update(@Valid @RequestBody Roles role) throws DBException, BadResponse {
 			rolesService.save(role);
 			return role;
 
 		}
-
+		@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 		@DeleteMapping("/{id}")
 		public String deleteRole(@NotNull @PathVariable Long id) throws  NotFound {
 			rolesService.delete(id);
