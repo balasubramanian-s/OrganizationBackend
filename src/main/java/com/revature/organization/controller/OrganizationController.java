@@ -37,7 +37,10 @@ public class OrganizationController {
 
 	@Autowired
 	private OrganizationService organizationService;
-
+	
+	
+	
+	
 	@GetMapping("/organization")
 	public ResponseEntity get() throws ServiceException, NotFound {
 		try {
@@ -61,7 +64,7 @@ public class OrganizationController {
 
 	}
 	
-	@ResponseStatus
+	
 	@GetMapping("/organization/{id}")
 	public ResponseEntity get(@PathVariable Long id) throws ServiceException, NotFound {
 		
@@ -113,7 +116,7 @@ public class OrganizationController {
 		
 		try {
 			organizationService.delete(id);
-			return new ResponseEntity(HttpStatus.OK.value(), "Record Deleted with id:"+id,null);
+			return new ResponseEntity(HttpStatus.OK.value(), "Record Deleted ",null);
 		}catch(NotFound e) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND.value(), OrganizationMessage.NO_RECORD);
 		}
@@ -121,11 +124,11 @@ public class OrganizationController {
 		
 	}
 	
-	@PutMapping("/organizations/status/{id}")
+	@PutMapping("/organization/status/{id}")
 	public ResponseEntity changeStatus(@PathVariable Long id) throws DBException,NotFound {
 		try {
 			organizationService.changeStatus(id);
-			return new ResponseEntity(HttpStatus.OK.value(), "Status Changed");
+			return new ResponseEntity(HttpStatus.OK.value(), "Status Changed",id);
 		}
 		catch(NotFound e) {
 			return new ResponseEntity(HttpStatus.NOT_MODIFIED.value(), "Unable to Change Status");
