@@ -41,6 +41,31 @@ public class InsertStudentDto {
 	@JsonIgnore
 	private LocalDateTime modifiedon=LocalDateTime.now();
 
+	
+	
+	
+	public InsertStudentDto() {
+		super();
+	}
+	public InsertStudentDto(Long id, @NotNull(message = "Organization cannot be Empty") Long institutionid,
+			@NotNull(message = "Register number cannot be Empty") Long redgno,
+			@NotEmpty(message = "Firstname Cannnot be Empty") String fname,
+			@NotEmpty(message = "Lastname Cannnot be Empty") String lname,
+			@NotNull(message = "DateofBirth cannot be Empty") Date dob,
+			@NotNull(message = "Year cannot be Empty") Integer year,
+			@NotNull(message = "MobileNumber cannot be Empty") Long mobileno,
+			@NotEmpty(message = "Email Cannnot be Empty") String email) {
+		super();
+		this.id = id;
+		this.institutionid = institutionid;
+		this.redgno = redgno;
+		this.fname = fname;
+		this.lname = lname;
+		this.dob = dob;
+		this.year = year;
+		this.mobileno = mobileno;
+		this.email = email;
+	}
 	public Long getInstitutionid() {
 		return institutionid;
 	}

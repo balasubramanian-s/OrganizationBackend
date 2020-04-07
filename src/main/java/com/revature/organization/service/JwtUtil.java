@@ -1,4 +1,4 @@
-package com.revature.organization.util;
+package com.revature.organization.service;
 
 import java.util.Date;
 import java.util.HashMap;

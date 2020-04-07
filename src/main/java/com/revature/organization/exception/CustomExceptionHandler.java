@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -115,17 +116,26 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		 ResponseError responseError = new ResponseError(HttpStatus.METHOD_NOT_ALLOWED, "Request Method Not Supported");
 		return buildResponseEntity(responseError);
 	}
-	@ExceptionHandler({BadCredentialsException.class})
-	public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex,WebRequest request){
-		ResponseError responseError = new ResponseError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
-		return new ResponseEntity<Object>(responseError, new HttpHeaders(), responseError.getStatus());
-	}
+
 	
 	@ExceptionHandler({AccessDeniedException.class})
 	public ResponseEntity<Object> handleAccesDenied(AccessDeniedException ex, WebRequest request){
 		ResponseError responserError=new ResponseError(HttpStatus.UNAUTHORIZED,"Access Denied");
 		return buildResponseEntity(responserError);
 	}
+	
+	@ExceptionHandler({RequestRejectedException.class})
+	public ResponseEntity<Object> handleRequestRejectedException(RequestRejectedException ex,WebRequest request){
+		ResponseError responserError=new ResponseError(HttpStatus.HTTP_VERSION_NOT_SUPPORTED,"The HTTP version used in the request is not supported by the server");
+		return buildResponseEntity(responserError);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {

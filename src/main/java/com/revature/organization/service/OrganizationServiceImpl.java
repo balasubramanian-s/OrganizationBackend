@@ -60,7 +60,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 	
 	@Override
 	public Organization get(Long id) throws NotFound{
-		Organization org = new Organization();
+		Organization org =new Organization();
 		try {
 			org = organizationDAO.get(id);
 			if (org==null) {
@@ -92,22 +92,22 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Transactional
 	@Override
 	public void update(Organization org) throws BadResponse, DBException,NotFound {
-		Organization orgg=new Organization();  
+		Organization orgObj=new Organization();
 		LocalDateTime modifiedon=LocalDateTime.now();
 		try {
-			orgg=organizationDAO.get(org.getId());
-			if(orgg.getId()==null) {
+			orgObj=organizationDAO.get(org.getId());
+			if(orgObj.getId()==null) {
 				throw new NotFound(HttpStatus.NOT_FOUND.value(),OrganizationMessage.NO_RECORD);
 			}
 			if(StringUtils.isBlank(org.getName())||StringUtils.isBlank(org.getAlias())|| StringUtils.isBlank(org.getUniversity())) {// Checks if a String is not blank, not empty, and not null
 				throw new BadResponse(HttpStatus.NOT_ACCEPTABLE.value(), OrganizationMessage.UNABLE_TO_INSERT);
 			}
-			orgg.setId(org.getId());
-			orgg.setName(org.getName());
-			orgg.setAlias(org.getAlias());
-			orgg.setUniversity(org.getUniversity());
-			orgg.setModifiedon(modifiedon);
-			organizationDAO.save(orgg);
+			orgObj.setId(org.getId());
+			orgObj.setName(org.getName());
+			orgObj.setAlias(org.getAlias());
+			orgObj.setUniversity(org.getUniversity());
+			orgObj.setModifiedon(modifiedon);
+			organizationDAO.save(orgObj);
 		}catch(DBException e) {
 			System.out.println(e.getMessage());
 		}
@@ -117,7 +117,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Transactional
 	@Override
 	public void delete(Long id)  throws NotFound{
-		Organization org = new Organization();
+		Organization org =new Organization();
 		try {
 			org = organizationDAO.get(id);
 			if(org!=null) {

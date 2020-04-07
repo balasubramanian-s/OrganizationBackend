@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.organization.exception.BadResponse;
 import com.revature.organization.exception.DBException;
+import com.revature.organization.exception.HttpStatusResponse;
 import com.revature.organization.exception.NotFound;
 import com.revature.organization.exception.ServiceException;
 import com.revature.organization.dto.InsertFacultyDto;
-import com.revature.organization.dto.ResponseEntity;
 import com.revature.organization.model.Faculty;
 import com.revature.organization.service.FacultyService;
 import com.revature.organization.util.FacultyMessage;
@@ -39,71 +40,74 @@ public class FacultyController {
 	private FacultyService facultyService;
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/")
-	public ResponseEntity getAllFaculty() throws ServiceException {
+	public ResponseEntity<HttpStatusResponse> getAllFaculty() throws ServiceException {
 		try {
 			List<Faculty> list =facultyService.getAllFaculty();
-			return new ResponseEntity(HttpStatus.OK.value(),"Data Retrived",list);
+			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		}catch(NotFound e) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND.value(),OrganizationMessage.NO_RECORDS);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/institution/{inst_id}")
-	public ResponseEntity getbyInst(@PathVariable Long inst_id) throws ServiceException {
+	public ResponseEntity<HttpStatusResponse> getbyInst(@PathVariable Long inst_id) throws ServiceException {
 
 		try {
 			List<Faculty> list =facultyService.getByFacultyInstitution(inst_id);
-			return new ResponseEntity(HttpStatus.OK.value(),"Data Retrived",list);
+			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		}catch(NotFound e) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND.value(),OrganizationMessage.NO_RECORDS);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/{id}")
-	public ResponseEntity get(@PathVariable Long id) throws ServiceException {
+	public ResponseEntity<HttpStatusResponse> get(@PathVariable Long id) throws ServiceException {
 
 		try {
 			Faculty faculty =facultyService.getFaculty(id);
-			return new ResponseEntity(HttpStatus.OK.value(),"Data Retrived",faculty);
+			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", faculty), HttpStatus.OK);
 		}catch(NotFound e) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND.value(),OrganizationMessage.NO_RECORDS);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 	@PostMapping("/")
-	public ResponseEntity save(@Valid @RequestBody InsertFacultyDto dto) throws DBException {
+	public ResponseEntity<HttpStatusResponse> save(@Valid @RequestBody InsertFacultyDto dto) throws DBException {
 		try {
 			facultyService.saveFaculty(dto);
-			return new ResponseEntity(HttpStatus.CREATED.value(), "Inserted  Successfullty", dto);
+			return new ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.CREATED.value(), "Data Insert Success", dto),HttpStatus.CREATED);
 			
 		}catch(BadResponse e) {
-			return new ResponseEntity(HttpStatus.BAD_REQUEST.value(), "Insertion Failed");
+			return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "No Data Inserted",null),HttpStatus.BAD_REQUEST);
 			
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 	@PutMapping("/")
-	public ResponseEntity update(@Valid @RequestBody InsertFacultyDto dto) throws DBException, NotFound {
+	public ResponseEntity<HttpStatusResponse> update(@Valid @RequestBody InsertFacultyDto dto) throws DBException {
 		try {
 			facultyService.updateFaculty(dto);
-			return new ResponseEntity(HttpStatus.CREATED.value(), "Updated Successfullty", dto);
+			return new ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(), "Data Updated", dto),HttpStatus.OK);
 			
 		}catch(BadResponse e) {
-			return new ResponseEntity(HttpStatus.BAD_REQUEST.value(), "Update Failed");
+			return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "No Data Updated",null),HttpStatus.BAD_REQUEST);
 			
+		}catch(NotFound e) {
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+
 		}
 		
 		
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity delete(@PathVariable Long id) throws NotFound {
+	public ResponseEntity<HttpStatusResponse> delete(@PathVariable Long id) throws NotFound {
 		try {
 			facultyService.deleteFaculty(id);
-			return new ResponseEntity(HttpStatus.OK.value(), "faculty Deleted with id:"+id,null);
+			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.OK.value(), "Record Deleted ",null),HttpStatus.OK);
 		}catch(NotFound e) {
-			return new ResponseEntity(HttpStatus.NOT_FOUND.value(), FacultyMessage.UNABLE_TO_DELETE);
+			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to make Changes",null),HttpStatus.NOT_FOUND);
 		}
 
 	}

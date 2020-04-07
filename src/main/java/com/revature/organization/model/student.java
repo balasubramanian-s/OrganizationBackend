@@ -64,6 +64,28 @@ public class student {
 		super();
 		
 	}
+	
+
+	public student(Long id, @NotNull(message = "Register number cannot be Empty") Long redgno,
+			@NotNull(message = "Organization cannot be Empty") Organization org,
+			@NotEmpty(message = "Firstname Cannnot be Empty") String fname,
+			@NotEmpty(message = "Lastname Cannnot be Empty") String lname,
+			@NotNull(message = "DateofBirth cannot be Empty") Date dob,
+			@NotNull(message = "Year cannot be Empty") Integer year,
+			@NotNull(message = "Mobile Number cannot be Empty") Long mobileno,
+			@NotEmpty(message = "Email Cannnot be Empty") String email) {
+		super();
+		this.id = id;
+		this.redgno = redgno;
+		this.org = org;
+		this.fname = fname;
+		this.lname = lname;
+		this.dob = dob;
+		this.year = year;
+		this.mobileno = mobileno;
+		this.email = email;
+	}
+
 
 	public Long getId() {
 		return id;

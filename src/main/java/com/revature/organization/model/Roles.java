@@ -22,9 +22,9 @@ public class Roles {
 		
 	}
 
-	public Roles(Long id, String name) {
+	public Roles(int id, String name) {
 		
-		this.id = id;
+		this.id = (long) id;
 		this.name = name;
 	}
 

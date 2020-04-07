@@ -9,5 +9,5 @@ import com.revature.organization.model.User;
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-	Optional<com.revature.organization.model.User> findByUserName(String userName);
+	Optional<User> findByUserName(String userName);
 }

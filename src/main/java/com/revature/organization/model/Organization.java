@@ -41,6 +41,32 @@ public class Organization  {
 
 	
 
+	
+	
+
+	
+
+
+
+	public Organization(int id, @NotEmpty(message = "Name Cannot be Empty") String name,
+			@NotEmpty(message = "Alias Cannot be Empty") String alias,
+			@NotEmpty(message = "University Cannot be Empty") String university, Boolean isActive) {
+		super();
+		this.id = (long)id;
+		this.name = name;
+		this.alias = alias;
+		this.university = university;
+		this.isActive = isActive;
+	}
+
+
+
+	public Organization() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -137,6 +163,9 @@ public class Organization  {
 			return false;
 		return true;
 	}
+
+
+
 
 	
 

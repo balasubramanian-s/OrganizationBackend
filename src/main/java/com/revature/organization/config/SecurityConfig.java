@@ -1,5 +1,7 @@
 package com.revature.organization.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import com.revature.organization.filter.JwtRequestFilter;
 import com.revature.organization.service.MyUserDetailsService;
@@ -55,4 +57,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return  NoOpPasswordEncoder.getInstance();
 	}
 	
+	//StrictHTTPFirewall. It only allows some HTTP verbs per default   specified to block HTTP Verb tampering and XST attacks.
+	@Bean
+	public StrictHttpFirewall httpFirewall() {
+	    StrictHttpFirewall firewall = new StrictHttpFirewall();
+	    firewall.setAllowedHttpMethods(Arrays.asList("GET", "POST","PUT","DELETE","OPTIONS"));
+	    return firewall;
+	}
 }
