@@ -83,6 +83,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 				throw new BadResponse(HttpStatus.NOT_ACCEPTABLE.value(), OrganizationMessage.UNABLE_TO_INSERT);
 			}			
 			org.setCreatedon(createdon);
+			
 			organizationDAO.save(org);
 		}catch(DBException e) {
 			System.out.println(e.getMessage());
@@ -108,6 +109,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 			orgObj.setUniversity(org.getUniversity());
 			orgObj.setModifiedon(modifiedon);
 			organizationDAO.save(orgObj);
+		
 		}catch(DBException e) {
 			System.out.println(e.getMessage());
 		}

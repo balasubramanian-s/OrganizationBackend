@@ -45,7 +45,7 @@ public class FacultyController {
 			List<Faculty> list =facultyService.getAllFaculty();
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		}catch(NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NO_CONTENT);
 		}
 
 	}
@@ -57,7 +57,7 @@ public class FacultyController {
 			List<Faculty> list =facultyService.getByFacultyInstitution(inst_id);
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		}catch(NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "No faculties at this Institution", null),	HttpStatus.NO_CONTENT);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
@@ -94,7 +94,7 @@ public class FacultyController {
 			return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "No Data Updated",null),HttpStatus.BAD_REQUEST);
 			
 		}catch(NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NO_CONTENT);
 
 		}
 		

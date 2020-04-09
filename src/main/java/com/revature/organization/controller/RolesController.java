@@ -43,7 +43,7 @@ public class RolesController {
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 
 			}catch(NotFound e) {
-				 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+				 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NO_CONTENT);
 
 			}
 			
@@ -56,7 +56,7 @@ public class RolesController {
 				return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", role), HttpStatus.OK);
 
 			}catch(NotFound e) {
-				 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+				 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records", null),	HttpStatus.NOT_FOUND);
 
 			}
 				
@@ -80,10 +80,10 @@ public class RolesController {
 		public ResponseEntity<HttpStatusResponse> update(@Valid @RequestBody Roles role) throws DBException, BadResponse {
 			try {
 				rolesService.save(role);
-				return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.CREATED.value(),"Data Inserted", null), HttpStatus.CREATED);
+				return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.CREATED.value(),"Data Updated", null), HttpStatus.CREATED);
 
 			}catch (BadResponse e) {
-				return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "No Data Inserted",null),HttpStatus.BAD_REQUEST);
+				return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "Update Failed",null),HttpStatus.BAD_REQUEST);
 			}
 		}
 		@PreAuthorize("hasAnyRole('ADMIN','FACULTY')")
@@ -91,10 +91,10 @@ public class RolesController {
 		public ResponseEntity<HttpStatusResponse> deleteRole(@NotNull @PathVariable Long id) throws  NotFound {
 			try {
 				rolesService.delete(id);
-				return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", null), HttpStatus.OK);
+				return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Role Deleted", null), HttpStatus.OK);
 
 			}catch(NotFound e) {
-				 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+				 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records", null),	HttpStatus.NOT_FOUND);
 
 			}
 			

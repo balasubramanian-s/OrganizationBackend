@@ -45,7 +45,7 @@ public class StudentController {
 			List<student> list = studservice.getAllStudent();
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		} catch (NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
@@ -70,7 +70,7 @@ public class StudentController {
 			List<student> list = studservice.getStudbyInst(inst_id);
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		} catch (NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
@@ -83,7 +83,7 @@ public class StudentController {
 			List<student> list = studservice.getStudbyInstYear(institutionid, year);
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		} catch (NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
@@ -94,7 +94,7 @@ public class StudentController {
 			List<student> list = studservice.getStudbyYear(year);
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		} catch (NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
 		}
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")

@@ -52,7 +52,7 @@ public class OrganizationController {
 			
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 		}catch(NotFound e) {
-			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to get records!!DB Empty", null),	HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "No Data", null),	HttpStatus.NO_CONTENT);
 		}		
 
 	}
@@ -64,7 +64,7 @@ public class OrganizationController {
 			
 			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived",list),HttpStatus.OK);
 		}catch(NotFound e) {
-			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NOT_FOUND.value(),"NotFound",null),HttpStatus.NOT_FOUND);
+			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NO_CONTENT.value(),"NotFound",null),HttpStatus.NO_CONTENT);
 		}		
 
 	}
@@ -88,7 +88,7 @@ public class OrganizationController {
 	public ResponseEntity<HttpStatusResponse> save(@Valid @RequestBody Organization Obj) throws MethodArgumentNotValidException, BadResponse, DBException {
 		try {
 			organizationService.save(Obj);
-			return new ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.CREATED.value(), "Data Insert Success", Obj),HttpStatus.CREATED);
+			return new ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.CREATED.value(), "Data Insert Success", null),HttpStatus.CREATED);
 			
 		}catch(BadResponse e) {
 			return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "No Data Inserted",null),HttpStatus.BAD_REQUEST);
@@ -108,7 +108,7 @@ public class OrganizationController {
 			return new ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(), "Data Updated", Obj),HttpStatus.OK);
 			
 		}catch(NotFound e) {
-			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NOT_FOUND.value(),"Not Found",null),HttpStatus.NOT_FOUND);
+			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NO_CONTENT.value(),"Not Found",null),HttpStatus.NO_CONTENT);
 		}
 		catch(BadResponse e) {
 			return  new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.BAD_REQUEST.value(), "No Data Updated",null),HttpStatus.BAD_REQUEST);
@@ -136,7 +136,7 @@ public class OrganizationController {
 			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.OK.value(), "Status Changed ",null),HttpStatus.OK);
 		}
 		catch(NotFound e) {
-			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NOT_FOUND.value(), "Unable to make Changes",null),HttpStatus.NOT_FOUND);
+			return new ResponseEntity<HttpStatusResponse>( new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "Unable to make Changes",null),HttpStatus.NO_CONTENT);
 		}
 		
 

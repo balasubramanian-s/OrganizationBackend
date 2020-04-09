@@ -126,6 +126,11 @@ public class Organization  {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
+	
+
+
+
+
 
 	@Override
 	public String toString() {
