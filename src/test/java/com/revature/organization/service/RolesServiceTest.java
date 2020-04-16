@@ -35,6 +35,8 @@ class RolesServiceTest {
 	     
 	 
 	 private Long id;
+	 private Integer offset;
+	 private Integer size;
 	
 
 	@Test
@@ -44,11 +46,11 @@ class RolesServiceTest {
 		list.add(new Roles(1,"HOD"));
 		list.add(new Roles(2,"Principal"));
 		
-		when(dao.get()).thenReturn(list);
+		when(dao.get(offset, size)).thenReturn(list);
 		
-		List<Roles> roleList=roles.get();
+		List<Roles> roleList=roles.getRoles(offset, size);
 		 assertEquals(2, roleList.size());
-		 verify(dao, times(1)).get();
+		 verify(dao, times(1)).get(offset, size);
 	}
 
 	@Test

@@ -21,9 +21,9 @@ public class RolesDaoImpl implements RolesDao {
 	private EntityManager entityManager;
 	
 	@Override
-	public List<Roles> get()  throws DBException{
+	public List<Roles> get(Integer offset,Integer size)  throws DBException{
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<Roles> query=currentSession.createQuery("from Roles",Roles.class);
+		Query<Roles> query=currentSession.createQuery("SELECT a FROM Roles a ORDER BY a.name ",Roles.class).setFirstResult(offset).setMaxResults(size);
 		List<Roles> list=query.getResultList();
 		return list;
 	}
@@ -36,7 +36,7 @@ public class RolesDaoImpl implements RolesDao {
 	}
 	
 	@Override
-	public void save(Roles role) throws DBException{
+	public void save(Roles role) {
 		Session currentSession = entityManager.unwrap(Session.class);
 		
 		currentSession.saveOrUpdate(role);
@@ -45,10 +45,11 @@ public class RolesDaoImpl implements RolesDao {
 	}
 	
 	@Override
-	public void delete(Long id)  throws DBException{
+	public void delete(Long id) {
 		Session currentSession = entityManager.unwrap(Session.class);
 		Roles roles=currentSession.get(Roles.class, id);
 		currentSession.delete(roles);
+		
 
 	}
 

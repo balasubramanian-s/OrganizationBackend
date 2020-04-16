@@ -6,6 +6,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.organization.exception.BadResponse;
@@ -36,10 +40,11 @@ public class RolesController {
 
 	// CONTROLLER FOR ROLES
 		@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
-		@GetMapping("/")
-		public ResponseEntity<HttpStatusResponse> getRoles() throws  NotFound {
+		@GetMapping
+		public ResponseEntity<HttpStatusResponse> getRoles(@RequestParam Integer pageNo,
+														@RequestParam  Integer pageSize) throws  NotFound {
 			try {
-			List<Roles> list= rolesService.get();
+			List<Roles> list= rolesService.getRoles(pageNo,pageSize);
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
 
 			}catch(NotFound e) {
@@ -48,6 +53,7 @@ public class RolesController {
 			}
 			
 		}
+	
 		@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 		@GetMapping("/{id}")
 		public  ResponseEntity<HttpStatusResponse> getRolesById(@NotNull @PathVariable Long id) throws  NotFound {

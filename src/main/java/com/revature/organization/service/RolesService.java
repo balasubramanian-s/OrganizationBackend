@@ -9,7 +9,8 @@ import com.revature.organization.exception.NotFound;
 import com.revature.organization.model.Roles;
 
 public interface RolesService {
-	List<Roles>  get() throws NotFound;
+	List<Roles>  getRoles(Integer offset,Integer size) throws NotFound;
+	
 	
 	Roles get(Long id) throws NotFound;
 	

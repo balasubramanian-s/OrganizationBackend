@@ -25,10 +25,10 @@ public class RolesServiceImpl implements RolesService {
 	
 	@Transactional
 	@Override
-	public List<Roles> get() throws NotFound {
+	public List<Roles> getRoles(Integer offset,Integer size) throws NotFound {
 		List<Roles> list=new ArrayList<Roles>();
 		try {
-			list=rolesDao.get();
+			list=rolesDao.get(offset,size);
 			if(list.isEmpty()) {
 				throw new NotFound(HttpStatus.NOT_FOUND.value(),RolesMessage.NO_RECORD);
 			}

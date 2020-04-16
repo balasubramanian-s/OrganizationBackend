@@ -40,7 +40,7 @@ public class FacultyController {
 	private FacultyService facultyService;
 	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','USER')")
 	@GetMapping("/")
-	public ResponseEntity<HttpStatusResponse> getAllFaculty() throws ServiceException {
+	public ResponseEntity<HttpStatusResponse> getAllFaculty() throws ServiceException, NotFound {
 		try {
 			List<Faculty> list =facultyService.getAllFaculty();
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);

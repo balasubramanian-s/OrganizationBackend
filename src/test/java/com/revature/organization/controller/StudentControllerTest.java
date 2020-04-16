@@ -8,21 +8,36 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.organization.dto.InsertStudentDto;
@@ -32,8 +47,13 @@ import com.revature.organization.model.Organization;
 import com.revature.organization.model.Roles;
 import com.revature.organization.model.student;
 import com.revature.organization.service.studentservice;
-
-class StudentControllerTest {
+@ExtendWith({RestDocumentationExtension.class,SpringExtension.class})
+@WebAppConfiguration
+@AutoConfigureRestDocs()
+class StudentControllerTest extends AbstractSecurityTest {
+	
+	
+	
 	private MockMvc mockmvc;
 
 	private ObjectMapper om = new ObjectMapper();
@@ -58,9 +78,10 @@ class StudentControllerTest {
 	private int year;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp(RestDocumentationContextProvider restDocumentation) throws Exception {
 		MockitoAnnotations.initMocks(this);
-		mockmvc = MockMvcBuilders.standaloneSetup(studentController).build();
+		this.mockmvc = MockMvcBuilders.standaloneSetup(studentController).apply(documentationConfiguration(restDocumentation)).build();		
+		login("admin", "pass");
 		studList = getStudList();
 	}
 
@@ -86,7 +107,9 @@ class StudentControllerTest {
 	@Test
 	void testGetAllStudent() throws Exception {
 		when(studentService.getAllStudent()).thenReturn(studList);
-		this.mockmvc.perform(get("/student/")).andExpect(status().isOk());
+		this.mockmvc.perform(get("/student/"))
+		.andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 	}
 
 	@Test
@@ -110,7 +133,9 @@ class StudentControllerTest {
 		stud.setMobileno((long) 994016369);
 		stud.setEmail("abc@gmail.com");
 		when(studentService.getStudentById((long) id)).thenReturn(stud);
-		this.mockmvc.perform(get("/student/{id}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(get("/student/{id}", 1))
+		.andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 	}
 
 	@Test
@@ -123,7 +148,9 @@ class StudentControllerTest {
 	@Test
 	void testGetStudentByInst() throws Exception {
 		when(studentService.getStudbyInst((long) instid)).thenReturn(studList);
-		this.mockmvc.perform(get("/student/institution/{institutionid}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(get("/student/institution/{institutionid}", 1))
+		.andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 	}
 
 	@Test
@@ -136,7 +163,9 @@ class StudentControllerTest {
 	@Test
 	void testGetStudentByInstYear() throws Exception {
 		when(studentService.getStudbyInstYear((long) instid, year)).thenReturn(studList);
-		this.mockmvc.perform(get("/student/institution/year/{institutionid}/{year}", 1, 1)).andExpect(status().isOk());
+		this.mockmvc.perform(get("/student/institution/year/{institutionid}/{year}", 1, 1))
+		.andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 	}
 
 	@Test
@@ -151,7 +180,9 @@ class StudentControllerTest {
 	@Test
 	void testGetStudentByYear() throws Exception {
 		when(studentService.getStudbyYear(year)).thenReturn(studList);
-		this.mockmvc.perform(get("/student/year/{year}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(get("/student/year/{year}", 1))
+		.andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 
 	}
 	@Test
@@ -176,9 +207,10 @@ class StudentControllerTest {
 		stud.setEmail("abc@gmail.com");
 		doNothing().when(studentService).saveStudent(stud);
 		String orgJson = om.writeValueAsString(stud);
-		MvcResult result = this.mockmvc
+		 this.mockmvc
 				.perform(post("/student/").contentType(MediaType.APPLICATION_JSON_VALUE).content(orgJson))
-				.andExpect(status().isCreated()).andReturn();
+				.andDo(print()).andExpect(status().isCreated())
+				.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 
 	}
 	@Test
@@ -205,9 +237,10 @@ class StudentControllerTest {
 		stud.setEmail("abc@gmail.com");
 		doNothing().when(studentService).updateStudent(stud);
 		String orgJson = om.writeValueAsString(stud);
-		MvcResult result = this.mockmvc
+		this.mockmvc
 				.perform(put("/student/").contentType(MediaType.APPLICATION_JSON_VALUE).content(orgJson))
-				.andExpect(status().isOk()).andReturn();
+				.andDo(print()).andExpect(status().isOk())
+				.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 	}
 	@Test
 	void testUpdateExpectFailure() throws Exception {
@@ -220,7 +253,9 @@ class StudentControllerTest {
 		student stud = new student();
 		id = 1;
 		when(studentService.getStudentById((long)id)).thenReturn(stud);
-		this.mockmvc.perform(delete("/student/{id}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(delete("/student/{id}", 1))
+		.andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
 	}
 	@Test
 	void testDeleteExpectFailure() throws Exception {

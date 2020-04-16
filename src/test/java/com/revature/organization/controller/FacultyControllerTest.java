@@ -2,28 +2,52 @@ package com.revature.organization.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Date;
 import java.util.ArrayList;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.WebApplicationContext;
+
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.organization.dto.InsertFacultyDto;
@@ -33,8 +57,14 @@ import com.revature.organization.model.Faculty;
 import com.revature.organization.model.Organization;
 import com.revature.organization.model.Roles;
 import com.revature.organization.service.FacultyService;
+@ExtendWith({RestDocumentationExtension.class,SpringExtension.class})
+@WebAppConfiguration
+@AutoConfigureRestDocs()
+class FacultyControllerTest extends AbstractSecurityTest {
+	
+	
 
-class FacultyControllerTest {
+	
 	private MockMvc mockmvc;
 
 	private ObjectMapper om = new ObjectMapper();
@@ -55,9 +85,11 @@ class FacultyControllerTest {
 	private long id;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp(RestDocumentationContextProvider restDocumentation) throws Exception {
 		MockitoAnnotations.initMocks(this);
-		mockmvc = MockMvcBuilders.standaloneSetup(facultycontroller).build();
+		this.mockmvc = MockMvcBuilders.standaloneSetup(facultycontroller).apply(documentationConfiguration(restDocumentation)).build();
+				
+		login("admin", "pass");
 		facList = getFacList();
 	}
 	private List<Faculty> getFacList() {
@@ -80,26 +112,32 @@ class FacultyControllerTest {
 	}
 
 	@Test
-	void testGetAllFaculty() throws Exception {
-		when(facultyService.getAllFaculty()).thenReturn(facList);
-		this.mockmvc.perform(get("/faculty/")).andExpect(status().isOk());
+	void testGetAllFaculty() throws  Exception  {
+
+		  
+	when(facultyService.getAllFaculty()).thenReturn(facList);
+		this.mockmvc.perform(get("/faculty/")).andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+
 	}
 	@Test
 	void testGetAllFacultyExpectFailure() throws Exception {
 		doThrow(NotFound.class).when(facultyService).getAllFaculty();
-		this.mockmvc.perform(get("/faculty/")).andExpect(status().isNotFound());
+		this.mockmvc.perform(get("/faculty/")).andExpect(status().isNoContent());
 	}
 	@Test
 	void testGetbyInst() throws Exception {
 		when(facultyService.getByFacultyInstitution(id)).thenReturn(facList);
-		this.mockmvc.perform(get("/faculty/institution/{id}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(get("/faculty/institution/{id}", 1)).andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+
 
 	}
 	@Test
 	void testGetbyInstExpectFailure() throws Exception {
 		id = (long) 1;
 		doThrow(NotFound.class).when(facultyService).getByFacultyInstitution(id);
-		this.mockmvc.perform(get("/faculty/institution/{id}", 1)).andExpect(status().isNotFound());
+		this.mockmvc.perform(get("/faculty/institution/{id}", 1)).andExpect(status().isNoContent());
 	}
 
 	@Test
@@ -116,7 +154,9 @@ class FacultyControllerTest {
 		faculty.setEmail("abc@gmail.com");
 		faculty.setMobile_no((long) 998451233);
 		when(facultyService.getFaculty(id)).thenReturn(faculty);
-		this.mockmvc.perform(get("/faculty/{id}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(get("/faculty/{id}", 1)).andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+
 	
 	}
 	@Test
@@ -142,9 +182,11 @@ class FacultyControllerTest {
 		faculty.setMobile_no((long) 998451233);
 		doNothing().when(facultyService).saveFaculty(faculty);
 		String orgJson = om.writeValueAsString(faculty);
-		MvcResult result = this.mockmvc
+		 this.mockmvc
 				.perform(post("/faculty/").contentType(MediaType.APPLICATION_JSON_VALUE).content(orgJson))
-				.andExpect(status().isCreated()).andReturn();
+				.andDo(print()).andExpect(status().isCreated())
+				.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+
 
 	}
 	@Test
@@ -169,9 +211,11 @@ class FacultyControllerTest {
 		faculty.setMobile_no((long) 998451233);
 		doNothing().when(facultyService).updateFaculty(faculty);
 		String orgJson = om.writeValueAsString(faculty);
-		MvcResult result = this.mockmvc
+		this.mockmvc
 				.perform(put("/faculty/").contentType(MediaType.APPLICATION_JSON_VALUE).content(orgJson))
-				.andExpect(status().isOk()).andReturn();
+				.andDo(print()).andExpect(status().isOk())	
+				.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+
 
 	}
 	@Test
@@ -180,13 +224,7 @@ class FacultyControllerTest {
 		doThrow(BadResponse.class).when(facultyService).updateFaculty(faculty);
 		this.mockmvc.perform(post("/faculty/")).andExpect(status().isBadRequest());
 	}
-//	@Test
-//	void testUpdateExpectFailureNotFound() throws Exception {
-//		InsertFacultyDto faculty = new InsertFacultyDto();
-//		doThrow(NotFound.class).when(facultyService).updateFaculty(faculty);
-//		this.mockmvc.perform(post("/faculty/")).andExpect(status().isBadRequest());
-//	}
-	
+
 	
 	
 	
@@ -196,7 +234,9 @@ class FacultyControllerTest {
 		Faculty faculty = new Faculty();
 		id = (long) 1;
 		when(facultyService.getFaculty(id)).thenReturn(faculty);
-		this.mockmvc.perform(delete("/faculty/{id}", 1)).andExpect(status().isOk());
+		this.mockmvc.perform(delete("/faculty/{id}", 1)).andDo(print()).andExpect(status().isOk())
+		.andDo(document("{methodName}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())));
+
 	}
 	@Test
 	void testDeleteExpectFailure() throws Exception {

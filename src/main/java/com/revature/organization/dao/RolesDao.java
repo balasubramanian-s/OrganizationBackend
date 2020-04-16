@@ -6,7 +6,7 @@ import com.revature.organization.exception.DBException;
 import com.revature.organization.model.Roles;
 
 public interface RolesDao {
-	List<Roles> get() throws DBException;
+	List<Roles> get(Integer offset,Integer size) throws DBException;
 
 	Roles get(Long id) throws DBException;
 

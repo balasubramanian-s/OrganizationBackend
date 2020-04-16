@@ -51,7 +51,7 @@ public class OrganizationController {
 			List<Organization> list=organizationService.get();
 			
 			return new  ResponseEntity<HttpStatusResponse>(new HttpStatusResponse(HttpStatus.OK.value(),"Data Retrived", list), HttpStatus.OK);
-		}catch(NotFound e) {
+	}catch(NotFound e) {
 			 return new ResponseEntity<>(new HttpStatusResponse(HttpStatus.NO_CONTENT.value(), "No Data", null),	HttpStatus.NO_CONTENT);
 		}		
 

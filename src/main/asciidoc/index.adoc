@@ -1,0 +1,49 @@
+= Organization REST DOCS 
+Getting Started With Spring REST Docs
+
+This is an example output for a service running at http://localhost:8080
+
+
+GET API For Organization  
+
+.Request
+include::{snippets}/testGetAllOrganization/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetAllOrganization/http-response.adoc[]
+
+
+GET API For Active Organization 
+
+.Request
+include::{snippets}/testGetActiveOrganization/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetActiveOrganization/http-response.adoc[]
+
+POST API to Add Organization 
+
+.Request
+include::{snippets}/testSave/http-request.adoc[]
+
+.Response
+include::{snippets}/testSave/http-response.adoc[]
+
+PUT API to Update Organization 
+
+.Request
+include::{snippets}/testUpdate/http-request.adoc[]
+
+.Response
+include::{snippets}/testUpdate/http-response.adoc[]
+
+DELETE API to Remove Organization 
+
+.Request
+include::{snippets}/testDelete/http-request.adoc[]
+
+.Response
+include::{snippets}/testDelete/http-response.adoc[]
+
+
+As you can see the format is very simple, and in fact you always get the same message.
