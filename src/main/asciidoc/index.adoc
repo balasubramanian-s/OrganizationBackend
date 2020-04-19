@@ -3,6 +3,7 @@ Getting Started With Spring REST Docs
 
 This is an example output for a service running at http://localhost:8080
 
+== Organization API 
 
 GET API For Organization  
 
@@ -24,26 +25,184 @@ include::{snippets}/testGetActiveOrganization/http-response.adoc[]
 POST API to Add Organization 
 
 .Request
-include::{snippets}/testSave/http-request.adoc[]
+include::{snippets}/testSaveOrganization/http-request.adoc[]
 
 .Response
-include::{snippets}/testSave/http-response.adoc[]
+include::{snippets}/testSaveOrganization/http-response.adoc[]
 
 PUT API to Update Organization 
 
 .Request
-include::{snippets}/testUpdate/http-request.adoc[]
+include::{snippets}/testUpdateOrganization/http-request.adoc[]
 
 .Response
-include::{snippets}/testUpdate/http-response.adoc[]
+include::{snippets}/testUpdateOrganization/http-response.adoc[]
 
 DELETE API to Remove Organization 
 
 .Request
-include::{snippets}/testDelete/http-request.adoc[]
+include::{snippets}/testDeleteOrganization/http-request.adoc[]
 
 .Response
-include::{snippets}/testDelete/http-response.adoc[]
+include::{snippets}/testDeleteOrganization/http-response.adoc[]
 
 
-As you can see the format is very simple, and in fact you always get the same message.
+== Faculty API
+
+ API to GET All Faculty 
+
+.Request
+include::{snippets}/testGetAllFaculty/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetAllFaculty/http-response.adoc[]
+
+ API to GET Faculty By Id
+
+.Request
+include::{snippets}/testGetFaculty/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetFaculty/http-response.adoc[]
+
+ API to GET Faculty by Institution
+
+.Request
+include::{snippets}/testGetbyInst/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetbyInst/http-response.adoc[]
+
+ API to Save Faculty 
+
+.Request
+include::{snippets}/testSaveFaculty/http-request.adoc[]
+
+.Response
+include::{snippets}/testSaveFaculty/http-response.adoc[]
+
+ API to Update Faculty 
+
+.Request
+include::{snippets}/testUpdateFaculty/http-request.adoc[]
+
+.Response
+include::{snippets}/testUpdateFaculty/http-response.adoc[]
+
+API to Delete Faculty 
+
+.Request
+include::{snippets}/testDeleteFaculty/http-request.adoc[]
+
+.Response
+include::{snippets}/testDeleteFaculty/http-response.adoc[]
+
+== Roles API
+
+ API to GET All Role 
+
+.Request
+include::{snippets}/testGetRoles/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetRoles/http-response.adoc[]
+
+ API to GET Role By Id
+
+.Request
+include::{snippets}/testGetRolesById/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetRolesById/http-response.adoc[]
+
+ API to Save Role 
+
+.Request
+include::{snippets}/testSaveRole/http-request.adoc[]
+
+.Response
+include::{snippets}/testSaveRole/http-response.adoc[]
+
+
+API to Delete Role 
+
+.Request
+include::{snippets}/testDeleteRole/http-request.adoc[]
+
+.Response
+include::{snippets}/testDeleteRole/http-response.adoc[]
+
+
+== Student API
+
+API to GET All Student 
+
+
+.Request
+include::{snippets}/testGetAllStudent/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetAllStudent/http-response.adoc[]
+
+ 
+
+ API to GET All Student By Institution Id 
+
+.Request
+include::{snippets}/testGetStudentByInst/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetStudentByInst/http-response.adoc[]
+
+ API to GET All Student By Institution Id and Year
+
+.Request
+include::{snippets}/testGetStudentByInstYear/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetStudentByInstYear/http-response.adoc[]
+
+API to GET Student By Year 
+
+.Request
+include::{snippets}/testGetStudentByYear/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetStudentByYear/http-response.adoc[]
+
+
+
+API to GET Student By Id 
+
+.Request
+include::{snippets}/testGetStudentById/http-request.adoc[]
+
+.Response
+include::{snippets}/testGetStudentById/http-response.adoc[]
+
+
+ API to Save Student 
+
+.Request
+include::{snippets}/testSaveStudent/http-request.adoc[]
+
+.Response
+include::{snippets}/testSaveStudent/http-response.adoc[]
+
+ API to Update Student 
+
+.Request
+include::{snippets}/testUpdateStudent/http-request.adoc[]
+
+.Response
+include::{snippets}/testUpdateStudent/http-response.adoc[]
+
+ API to Delete Student 
+
+.Request
+include::{snippets}/testDeleteStudent/http-request.adoc[]
+
+.Response
+include::{snippets}/testDeleteStudent/http-response.adoc[]
+
+

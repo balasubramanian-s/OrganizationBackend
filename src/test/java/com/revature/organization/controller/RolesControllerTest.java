@@ -118,7 +118,7 @@ class RolesControllerTest extends AbstractSecurityTest {
 
 
 	@Test
-	void testSave() throws Exception {
+	void testSaveRole() throws Exception {
 		Roles role = new Roles();
 		role.setId((long) 1);
 		role.setName("HOD");

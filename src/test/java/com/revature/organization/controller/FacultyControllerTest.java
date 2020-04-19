@@ -141,7 +141,7 @@ class FacultyControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testGet() throws Exception {
+	void testGetFaculty() throws Exception {
 		Faculty faculty = new Faculty();
 		faculty.setEmployee_id(1);
 		faculty.setFirst_name("abc");
@@ -167,7 +167,7 @@ class FacultyControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testSave() throws Exception {
+	void testSaveFaculty() throws Exception {
 		InsertFacultyDto faculty = new InsertFacultyDto();
 		faculty.setId((long) 1);
 		faculty.setEmployee_id(1);
@@ -196,7 +196,7 @@ class FacultyControllerTest extends AbstractSecurityTest {
 		this.mockmvc.perform(post("/faculty/")).andExpect(status().isBadRequest());
 	}
 	@Test
-	void testUpdate() throws Exception {
+	void testUpdateFaculty() throws Exception {
 		InsertFacultyDto faculty = new InsertFacultyDto();
 		faculty.setId((long) 1);
 		faculty.setEmployee_id(1);
@@ -230,7 +230,7 @@ class FacultyControllerTest extends AbstractSecurityTest {
 	
 	
 	@Test
-	void testDelete() throws Exception {
+	void testDeleteFaculty() throws Exception {
 		Faculty faculty = new Faculty();
 		id = (long) 1;
 		when(facultyService.getFaculty(id)).thenReturn(faculty);

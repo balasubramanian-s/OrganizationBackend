@@ -126,7 +126,7 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testGet() throws Exception {
+	void testGetOrganizationbyId() throws Exception {
 		Organization organization = new Organization();
 		organization.setName("KCG College of Engineering");
 		organization.setAlias("KCG");
@@ -140,7 +140,7 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testSave() throws Exception {
+	void testSaveOrganization() throws Exception {
 		Organization organization = new Organization();
 		organization.setId((long) 1);
 		organization.setName("KCG College of Engineering");
@@ -158,7 +158,7 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testUpdate() throws Exception {
+	void testUpdateOrganization() throws Exception {
 		Organization organization = new Organization();
 		organization.setId((long) 1);
 		organization.setName("KCG College of Engineering");
@@ -175,7 +175,7 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testDelete() throws Exception {
+	void testDeleteOrganization() throws Exception {
 		Organization organization = new Organization();
 		id = (long) 1;
 		when(organizationService.get(id)).thenReturn(organization);
@@ -186,7 +186,7 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	}
 
 	@Test
-	void testChangeStatus() throws Exception {
+	void testChangeStatusOrganization() throws Exception {
 		id = (long) 1;
 		doNothing().when(organizationService).changeStatus(id);
 		this.mockmvc.perform(put("/core/organization/status/{id}", 1)).andDo(print()).andExpect(status().isOk())
