@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.revature.organization.model.MyUserDetails;
 import com.revature.organization.model.User;
 import com.revature.organization.dao.UserRepository;
+import com.revature.organization.exception.DBException;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 	
@@ -29,6 +30,17 @@ public class MyUserDetailsService implements UserDetailsService {
 	
 	return	user.map(MyUserDetails::new).get();
 	}
+	
+	
+	public void SaveUser(User user) {
+		userRepository.save(user);
 		
+	}
+	
+	public String getEncryptedPassword(String name) throws DBException {
+		return userRepository.getEncryptedPassword(name);
+	}
 }
+
+
  

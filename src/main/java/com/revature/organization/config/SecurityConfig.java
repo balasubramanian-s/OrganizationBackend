@@ -21,12 +21,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 import com.revature.organization.dao.UserRepository;
+import com.revature.organization.exception.DBException;
 import com.revature.organization.filter.JwtRequestFilter;
 import com.revature.organization.model.User;
 import com.revature.organization.service.JwtUtil;
@@ -45,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-		auth.userDetailsService(myUserDetailsService);
+		auth.userDetailsService(myUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	
 		
 	}
@@ -67,8 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 	@Bean
-	public PasswordEncoder getpasswordEncoder() {
-		return  NoOpPasswordEncoder.getInstance();
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+	    return new BCryptPasswordEncoder();
 	}
 	
 	//StrictHTTPFirewall. It only allows some HTTP verbs per default   specified to block HTTP Verb tampering and XST attacks.
@@ -241,6 +243,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			
 			@Override
 			public Optional<User> findByUserName(String userName) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public String getEncryptedPassword(String name) throws DBException {
 				// TODO Auto-generated method stub
 				return null;
 			}

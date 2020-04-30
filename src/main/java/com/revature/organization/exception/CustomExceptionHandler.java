@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -130,7 +131,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(responserError);
 	}
 	
+	@ExceptionHandler({BadCredentialsException.class})
+	public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex,WebRequest request){
+		ResponseError responserError=new ResponseError(HttpStatus.UNAUTHORIZED,"Bad Credentials");
+		return buildResponseEntity(responserError);
+	}
 	
+	@ExceptionHandler({DataIntegrityViolationException.class})
+	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,WebRequest request){
+		ResponseError responserError=new ResponseError(HttpStatus.NOT_ACCEPTABLE,"User already exists");
+		return buildResponseEntity(responserError);
+	}
 	
 	
 	
