@@ -27,7 +27,9 @@ public class student {
 	@ManyToOne
 	@JoinColumn(name = "`institution_id`")
 	private Organization org;
-	
+	@NotNull(message="Batch cannot be Empty")
+	@Column(name="`Batch`")
+	private String batch;
 	
 	@NotEmpty(message="Firstname Cannnot be Empty")
 	@Column(name = "`first_name`")
@@ -84,6 +86,16 @@ public class student {
 		this.year = year;
 		this.mobileno = mobileno;
 		this.email = email;
+	}
+
+
+	public String getBatch() {
+		return batch;
+	}
+
+
+	public void setBatch(String batch) {
+		this.batch = batch;
 	}
 
 

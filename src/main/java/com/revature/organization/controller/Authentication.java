@@ -1,5 +1,8 @@
 package com.revature.organization.controller;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.validation.Valid;
@@ -25,6 +28,7 @@ import com.revature.organization.model.AuthenticationRequest;
 import com.revature.organization.model.AuthenticationResponse;
 import com.revature.organization.model.Emailmessage;
 import com.revature.organization.model.User;
+import com.revature.organization.service.EmailSender;
 import com.revature.organization.service.JwtUtil;
 import com.revature.organization.service.MyUserDetailsService;
 import com.revature.organization.service.NotificationSender;
@@ -43,7 +47,7 @@ public class Authentication {
 	@Autowired
 	private MyUserDetailsService myUserDetailsService;
 	@Autowired
-	private NotificationSender notificationService;
+	private EmailSender emailSender;
 	
 	private Emailmessage message = new Emailmessage();
 	
@@ -53,14 +57,14 @@ public class Authentication {
 			throws BadCredentialsException, DBException {
 		
 			String hashed=myUserDetailsService.getEncryptedPassword(authenticationRequest.getUsername());
-		//	System.out.println(hashed);
-		//	System.out.println(authenticationRequest.getPassword());
-		//	System.out.println(BCrypt.checkpw(authenticationRequest.getPassword(),hashed ));
-			if(BCrypt.checkpw(authenticationRequest.getPassword(),hashed )) {
-				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword() ));
+	
+			if(BCrypt.checkpw(authenticationRequest.getPassword(),hashed )) {// If password matches it will proceed to generate Token
+				authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword() ));
 				final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());				
 				String jwt = jwtUtil.generateToken(userDetails);
-				return new ResponseEntity<HttpStatusResponse> (new HttpStatusResponse(HttpStatus.OK.value(),"Credentials Verified",new AuthenticationResponse(jwt)),HttpStatus.OK);
+				return new ResponseEntity<HttpStatusResponse> 
+				(new HttpStatusResponse(HttpStatus.OK.value(),"Credentials Verified",new AuthenticationResponse(jwt)),HttpStatus.OK);
 			} 
 			else {			
 			
@@ -70,22 +74,22 @@ public class Authentication {
 		
 	}
 	@PostMapping({ "/register" })
-	public String signup(@Valid @RequestBody User user) throws AddressException, MessagingException, MailException, InterruptedException {
-		
-		user.setPassword( BCrypt.hashpw(user.getPassword(),BCrypt.gensalt()));
-		//System.out.println(user.getPassword());
-		
-		
+	public  ResponseEntity<HttpStatusResponse>  signup(@Valid @RequestBody User user) throws AddressException, MessagingException, MailException, InterruptedException, GeneralSecurityException, IOException {
+		String res;
+		user.setPassword( BCrypt.hashpw(user.getPassword(),BCrypt.gensalt()));//hashing the password
 		myUserDetailsService.SaveUser(user);	
 		message.setName(user.getFullname());
 		message.setTo_address(user.getUsername());
-		message.setSubject("Registration Successfull");
+		message.setSubject("Registration Successfull [Action Required]");
 		message.setBody("Congratulations! <br>Your request for access to Revature Online has been approved. "
 				+ "<br>	You are one step closer to launching an exciting career in technology.");
-		notificationService.sendNotification(message);
-		return "Registration Successfull";
+		
+		res=emailSender.sendEmail(message); //Sending Registration Successfull Mail
+		return new ResponseEntity<HttpStatusResponse>
+		(new HttpStatusResponse(HttpStatus.OK.value(),"Credentials Verified",res),HttpStatus.OK);
 		
 	}
+	
 	
 		
 }

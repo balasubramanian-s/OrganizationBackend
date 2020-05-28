@@ -65,6 +65,7 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	@Spy
 	List<Organization> orgList = new ArrayList<Organization>();
 
+	
 
 
 	
@@ -75,7 +76,8 @@ class OrganizationControllerTest extends AbstractSecurityTest {
 	@BeforeEach
 	void setUp(RestDocumentationContextProvider restDocumentation) throws Exception {
 		MockitoAnnotations.initMocks(this);
-		this.mockmvc = MockMvcBuilders.standaloneSetup(organizationcontroller).apply(documentationConfiguration(restDocumentation)).build();
+		this.mockmvc = MockMvcBuilders.standaloneSetup(organizationcontroller)
+				.apply(documentationConfiguration(restDocumentation)).build();
 		
 		login("admin", "pass");
 		orgList = getOrgList();

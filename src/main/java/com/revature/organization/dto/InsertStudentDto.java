@@ -1,7 +1,9 @@
 package com.revature.organization.dto;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -26,6 +28,12 @@ public class InsertStudentDto {
 	@NotNull(message="DateofBirth cannot be Empty")
 	private Date dob;
 	
+	@NotNull(message="StartYear cannot be Empty")
+	private String startYear;
+	
+	@NotNull(message="EndYear cannot be Empty")
+	private String endYear;
+	
 	@NotNull(message="Year cannot be Empty")
 	private Integer year;
 	
@@ -47,14 +55,18 @@ public class InsertStudentDto {
 	public InsertStudentDto() {
 		super();
 	}
+	
 	public InsertStudentDto(Long id, @NotNull(message = "Organization cannot be Empty") Long institutionid,
 			@NotNull(message = "Register number cannot be Empty") Long redgno,
 			@NotEmpty(message = "Firstname Cannnot be Empty") String fname,
 			@NotEmpty(message = "Lastname Cannnot be Empty") String lname,
 			@NotNull(message = "DateofBirth cannot be Empty") Date dob,
+			@NotNull(message = "StartYear cannot be Empty") String startYear,
+			@NotNull(message = "EndYear cannot be Empty") String endYear,
 			@NotNull(message = "Year cannot be Empty") Integer year,
 			@NotNull(message = "MobileNumber cannot be Empty") Long mobileno,
-			@NotEmpty(message = "Email Cannnot be Empty") String email) {
+			@NotEmpty(message = "Email Cannnot be Empty") String email, LocalDateTime createdon,
+			LocalDateTime modifiedon) {
 		super();
 		this.id = id;
 		this.institutionid = institutionid;
@@ -62,10 +74,15 @@ public class InsertStudentDto {
 		this.fname = fname;
 		this.lname = lname;
 		this.dob = dob;
+		this.startYear = startYear;
+		this.endYear = endYear;
 		this.year = year;
 		this.mobileno = mobileno;
 		this.email = email;
+		this.createdon = createdon;
+		this.modifiedon = modifiedon;
 	}
+
 	public Long getInstitutionid() {
 		return institutionid;
 	}
@@ -131,6 +148,22 @@ public class InsertStudentDto {
 	}
 	public void setModifiedon(LocalDateTime modifiedon) {
 		this.modifiedon = modifiedon;
+	}
+	
+	
+
+	
+	public String getStartYear() {
+		return startYear;
+	}
+	public void setStartYear(String startYear) {
+		this.startYear = startYear;
+	}
+	public String getEndYear() {
+		return endYear;
+	}
+	public void setEndYear(String endYear) {
+		this.endYear = endYear;
 	}
 	@Override
 	public String toString() {

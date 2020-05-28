@@ -48,6 +48,7 @@ public class studentserviceimpl implements studentservice {
 	public void saveStudent(InsertStudentDto dto) throws DBException,BadResponse {
 		student stud = new student();
 		Organization org = new Organization();
+		String batchname;
 		try {
 			if (StringUtils.isBlank(dto.getFname()) || StringUtils.isBlank(dto.getLname())
 					|| StringUtils.isBlank(dto.getEmail()) || dto.getRedgno() == 0
@@ -65,6 +66,7 @@ public class studentserviceimpl implements studentservice {
 			stud.setMobileno(dto.getMobileno());
 			stud.setEmail(dto.getEmail());
 			stud.setCreatedon(dto.getCreatedon());
+			stud.setBatch(dto.getStartYear()+" - "+ dto.getEndYear());
 			studdao.insert(stud);
 			
 		}catch(DBException e) {
